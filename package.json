@@ -1,0 +1,19 @@
+{
+  "name": "ai_project",
+  "version": "0.0.1",
+  "description": "Artificial Intelligence Course Final Project, HUT",
+  "main": "index.js",
+  "scripts": {
+    "dev": "SET NODE_ENV=development postcss ./css/tailwind.css -o ./css/main.css -w",
+    "build": "NODE_ENV=production postcss ./css/tailwind.css -o ./css/main.css"
+  },
+  "author": "Farhad Uneci",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "autoprefixer": "^10.2.6",
+    "postcss": "^8.3.2",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.1.4"
+  }
+}
