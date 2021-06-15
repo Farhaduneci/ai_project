@@ -1,8 +1,32 @@
 // Farhad Uneci, 9708253
 
+import Board from "./classes/Board";
+import Player from "./classes/Player";
+import './css/style.css';
+
+//Helpers (from http://jaketrent.com/po	st/addremove-classes-raw-javascript/)
+function hasClass(el, className) {
+	if (el.classList) return el.classList.contains(className);
+	else
+		return !!el.className.match(
+			new RegExp("(\\s|^)" + className + "(\\s|$)")
+		);
+}
+function addClass(el, className) {
+	if (el.classList) el.classList.add(className);
+	else if (!hasClass(el, className)) el.className += " " + className;
+}
+function removeClass(el, className) {
+	if (el.classList) el.classList.remove(className);
+	else if (hasClass(el, className)) {
+		var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
+		el.className = el.className.replace(reg, " ");
+	}
+}
+
 // constants
-const gameRounds = 20
-const tableSize = 20
+const gameRounds = 20;
+const tableSize = 20;
 
 // HTML elements
 var html_table = document.getElementById("table");
@@ -100,25 +124,24 @@ function randomMove(board, player) {
 			randomCoordinates.y != randomPlayerTaw.y) ||
 		randomCoordinates.x < 0 ||
 		randomCoordinates.y > board.length ||
-		board[randomCoordinates.x][randomCoordinates.y] == (player + 2) % 2 + 1 // Players bound
+		board[randomCoordinates.x][randomCoordinates.y] ==
+			((player + 2) % 2) + 1 // Players bound
 	);
 
 	return randomCoordinates;
 }
 
 function randomGame(board) {
-    let gameCounter = gameRounds
-    let turn = 0
+	let gameCounter = gameRounds;
+	let turn = 0;
 
-    // counter -- > 0
-    while (gameCounter --> 0) {
-        turn = (turn + 2) % 2 + 1
-        let playerRandomMove = randomMove(board, turn)
+	// counter -- > 0
+	while (gameCounter-- > 0) {
+		turn = ((turn + 2) % 2) + 1;
+		let playerRandomMove = randomMove(board, turn);
 
-        board[playerRandomMove.x][playerRandomMove.y] = turn
-    }
+		board[playerRandomMove.x][playerRandomMove.y] = turn;
+	}
 }
 
-printBoard(board)
-randomGame(board)
-printBoard(board)
+// function randomGame(starting_player = 1) {}

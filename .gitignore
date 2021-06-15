@@ -1,2 +1,4 @@
 /node_modules
 css/main.css
+*.lock
+/dist
