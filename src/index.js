@@ -2,11 +2,11 @@
  * @author Farhad Uneci, 9708253 <farhaduneci@gmail.com>
  */
 
-import Board from "./classes/Board";
-import Player from "./classes/Player";
-import { hasClass, addClass, removeClass } from "./classes/Helpers";
-
 import "./css/style.css";
 
+import Board from "./classes/Board";
+import Player from "./classes/Player";
+
 let board = new Board(20);
-let player = new Player();
+let player1 = new Player("X");
+let player2 = new Player("O");

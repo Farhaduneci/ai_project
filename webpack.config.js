@@ -36,7 +36,7 @@ var config = {
 			template: "./src/index.html",
 		}),
 		new FaviconsWebpackPlugin({
-			logo: "./src/statics/favicon.ico",
+			logo: "./src/assets/favicon.ico",
 			prefix: "assets/",
 			mode: "light",
 		}),
