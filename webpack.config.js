@@ -8,6 +8,7 @@ var config = {
 	output: {
 		path: path.join(__dirname, "dist"),
 		publicPath: "",
+		clean: true
 	},
 	module: {
 		rules: [
@@ -45,10 +46,9 @@ var config = {
 
 module.exports = (env, argv) => {
 	if (argv.mode === "development") {
-		config.output.filename = "script.js"
+		config.output.filename = "script.[contenthash].js"
 	} else {
 		config.output.filename = "script.[contenthash].js"
-		config.output.clean = true
 	}
 
 	return config;

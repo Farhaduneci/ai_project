@@ -12,8 +12,8 @@ let board1 = new Board(20);
 let board2 = new Board(20);
 let board3 = new Board(20);
 
-let player1 = new Player("🇦");
-let player2 = new Player("🇧");
+let player1 = new Player("1");
+let player2 = new Player("2");
 
 board1.insertTaw(player1, { row: 0, col: 7 });
 board1.insertTaw(player2, { row: 0, col: 11 });
