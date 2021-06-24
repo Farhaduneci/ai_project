@@ -33,7 +33,7 @@ while (x-- > 0) {
 }
 
 var t1 = performance.now();
-console.log("Random Game took " + (t1 - t0) + " milliseconds.");
+console.warn("Random Game took '" + (t1 - t0) + "' milliseconds.");
 
 x = 20;
 
@@ -90,7 +90,7 @@ while (x-- > 0) {
 }
 
 t1 = performance.now();
-console.log("MiniMax Game took " + (t1 - t0) + " milliseconds.");
+console.warn("MiniMax Game took '" + (t1 - t0) + "' milliseconds.");
 
 x = 20;
 
@@ -149,7 +149,7 @@ while (x-- > 0) {
 }
 
 t1 = performance.now();
-console.log("Alpha-beta Game took " + (t1 - t0) + " milliseconds.");
+console.warn("Alpha-beta Game took '" + (t1 - t0) + "' milliseconds.");
 
 printBoard(board1.state, player1.identifier, player2.identifier, "table1");
 printBoard(board2.state, player1.identifier, player2.identifier, "table2");
@@ -171,10 +171,10 @@ function calculateWinner(game, player1, player2, board) {
         player2_score += board.eval(taw, player2, player1)
     })
 
-    console.log(
-        "Game mode: ", game, "\n",
-        "Player 1 score: ", player1_score, "\n",
-        "Player 2 score: ", player2_score, "\n\n",
-        "Winner: ", player1_score > player2_score ? "PLAYER 1" : "PLAYER 2"
-    );
+    console.group("Game mode: ", game)
+    console.log("Player 1 score: ", player1_score, "\n");
+    console.log("Player 2 score: ", player2_score, "\n\n");
+    console.log("Winner: ",);
+    console.log(`%c Winner! ${player1_score > player2_score ? "PLAYER 1" : "PLAYER 2"} `, 'background: #222; color: #fff');
+    console.groupEnd();
 }
