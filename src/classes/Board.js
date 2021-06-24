@@ -3,6 +3,8 @@
  * @author Farhad Uneci, 9708253 <farhaduneci@gmail.com>
  */
 
+import { isInBoardBoundaries, isTakenByPlayer } from "./Helpers";
+
 /**
  * @desc This class represents the board, contains methods that checks board state, insert a symbol, etc..
  * @param {Number} size - an integer representing the board's state array size.
@@ -12,11 +14,9 @@ class Board {
 	constructor(size) {
 		this.size = size;
 		this.state = [...Array(size)].map(
-			() => [...Array(size)].map(() => null) // size*size array filled with null values
+			() => [...Array(size)].map(() => 0) // size*size array filled with null values
 		);
 	}
-	// Prints the state as a HTML table
-	printBoard() {}
 	/**
 	 * Checks if board has no symbols yet
 	 * @returns {Boolean}
@@ -75,13 +75,48 @@ class Board {
 		return player_taws;
 	}
 	/**
+	 * Evaluates a position based on game rules
+	 * @param {Object} position
+	 * @param {Number} position.row
+	 * @param {Number} position.col
+	 * @param {Player} player - Player's identifier is used as inserted symbol
+	 * @returns {Number} Indicating evaluation score of the selected position based on game rules
+	 */
+	eval(position, player, otherPlayer) {
+		let score = 0;
+		let directions = [
+			[-1, 0], // Up
+			[1, 0], // Down
+			[-2, 2],
+			[-2, -2],
+			[2, -2],
+			[2, 2],
+		];
+
+		// Directions in board boundaries and taken by user
+		directions = directions.filter(
+			(direction) =>
+				isInBoardBoundaries(this, direction, position) &&
+				!isTakenByPlayer(this, otherPlayer, direction, position)
+		);
+
+		directions.forEach((direction) => {
+			if (direction == directions[0] || direction == directions[1]) {
+				if (isTakenByPlayer(this, player, direction, position))
+					score += 10;
+			} else {
+				if (isTakenByPlayer(this, player, direction, position))
+					score += 1000;
+			}
+		});
+
+		return score;
+	}
+	/**
 	 * Checks if the board has a terminal state
 	 * @return {Boolean}
 	 */
 	isTerminal() {
-		// Return false if board in empty
-		if (this.isEmpty()) return false;
-
 		return this.isFull();
 	}
 }

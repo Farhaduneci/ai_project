@@ -4,6 +4,7 @@
 
 import {
 	randomInt,
+	availableMoves as playerAvailableMoves,
 	hasAvailableMove,
 	randomArrayElement,
 	randomMoveValidation as randomMoveIsNotValid,
@@ -62,6 +63,175 @@ class Player {
 		);
 
 		return randomCoordinate;
+	}
+	/**
+	 * Generates the best possible move for a player taw
+	 * @param {Object} position - Starting position for the algorithm to run
+	 * @param {Number} depth - How far should the game tree expand
+	 * @param {Boolean} isMaximizingPlayer - Indicates players turn
+	 * @param {Board} board - Board class instance
+	 */
+	miniMaxMove(
+		position,
+		player,
+		otherPlayer,
+		depth,
+		isMaximizingPlayer,
+		board
+	) {
+		if (depth == 0 || board.isTerminal())
+			return { evaluation: board.eval(position, player, otherPlayer) };
+
+		let moveEvaluations = new Map();
+
+		if (isMaximizingPlayer) {
+			let maxEval = Number.NEGATIVE_INFINITY;
+			playerAvailableMoves(board, position).forEach((move) => {
+				let newPosition = {
+					row: position.row + move[0],
+					col: position.col + move[1],
+				};
+
+				let { evaluation } = this.miniMaxMove(
+					newPosition,
+					player,
+					otherPlayer,
+					depth - 1,
+					false,
+					board
+				);
+
+				maxEval = Math.max(maxEval, evaluation);
+				moveEvaluations.set(newPosition, evaluation);
+			});
+
+			return {
+				evaluation: maxEval,
+				bestMove: [...moveEvaluations.entries()].length
+					? [...moveEvaluations.entries()].reduce((a, e) =>
+							e[1] > a[1] ? e : a
+					  )[0]
+					: {},
+			};
+		} else {
+			let minEval = Number.POSITIVE_INFINITY;
+			playerAvailableMoves(board, position).forEach((move) => {
+				let newPosition = {
+					row: position.row + move[0],
+					col: position.col + move[1],
+				};
+
+				let { evaluation } = this.miniMaxMove(
+					newPosition,
+					player,
+					otherPlayer,
+					depth - 1,
+					true,
+					board
+				);
+
+				minEval = Math.min(minEval, evaluation);
+				moveEvaluations.set(newPosition, evaluation);
+			});
+
+			return {
+				evaluation: minEval,
+				bestMove: [...moveEvaluations.entries()].length
+					? [...moveEvaluations.entries()].reduce((a, e) =>
+							e[1] > a[1] ? e : a
+					  )[0]
+					: {},
+			};
+		}
+	}
+	/**
+	 * Generates the best possible move for a player taw (and also purges the game tree)
+	 * @param {Object} position - Starting position for the algorithm to run
+	 * @param {Number} depth - How far should the game tree expand
+	 * @param {Boolean} isMaximizingPlayer - Indicates players turn
+	 * @param {Board} board - Board class instance
+	 */
+	alphaBetaMove(
+		position,
+		player,
+		otherPlayer,
+		depth,
+		alpha,
+		beta,
+		isMaximizingPlayer,
+		board
+	) {
+		if (depth == 0 || board.isTerminal())
+			return { evaluation: board.eval(position, player, otherPlayer) };
+
+		let moveEvaluations = new Map();
+
+		if (isMaximizingPlayer) {
+			let maxEval = Number.NEGATIVE_INFINITY;
+			playerAvailableMoves(board, position).forEach((move) => {
+				let newPosition = {
+					row: position.row + move[0],
+					col: position.col + move[1],
+				};
+
+				let { evaluation } = this.alphaBetaMove(
+					newPosition,
+					player,
+					otherPlayer,
+					depth - 1,
+					alpha,
+					beta,
+					false,
+					board
+				);
+
+				maxEval = Math.max(maxEval, evaluation);
+				alpha = Math.max(alpha, evaluation);
+				if (beta >= alpha) moveEvaluations.set(newPosition, evaluation);
+			});
+
+			return {
+				evaluation: maxEval,
+				bestMove: [...moveEvaluations.entries()].length
+					? [...moveEvaluations.entries()].reduce((a, e) =>
+							e[1] > a[1] ? e : a
+					  )[0]
+					: {},
+			};
+		} else {
+			let minEval = Number.POSITIVE_INFINITY;
+			playerAvailableMoves(board, position).forEach((move) => {
+				let newPosition = {
+					row: position.row + move[0],
+					col: position.col + move[1],
+				};
+
+				let { evaluation } = this.alphaBetaMove(
+					newPosition,
+					player,
+					otherPlayer,
+					depth - 1,
+					alpha,
+					beta,
+					true,
+					board
+				);
+
+				minEval = Math.min(minEval, evaluation);
+
+				beta = Math.min(beta, evaluation);
+				if (beta >= alpha) moveEvaluations.set(newPosition, evaluation);
+			});
+
+			return {
+				evaluation: minEval,
+				bestMove: [...moveEvaluations.entries()].length
+					? [...moveEvaluations.entries()].reduce((a, e) =>
+							e[1] > a[1] ? e : a
+					  )[0]
+					: {},
+			};
+		}
 	}
 }
 
